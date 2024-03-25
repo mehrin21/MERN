@@ -24,6 +24,16 @@ app.use(express.json())
 app.use('/api/user',userRouter)
 app.use('/api/auth',authRouter)
 
+app.use((err,req,res,next)=>{
+  const statusCode = err.statuscode || 500;
+  const message = err.message || "Internal server error";
+  return res.status(statusCode).json({
+    success:false,
+    statusCode,
+    message
+  })
+})
+
 app.listen(9001, () => {
   console.log("server is listeneing");
 });
