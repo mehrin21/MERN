@@ -5,7 +5,8 @@ import { errorHandler } from "../util/errorHandler.js";
 export const signup = async (req, res,next) => {
   const { username, email, password } = req.body;
   //HASHING PASSWORD
-  const hashPassword = bcryptjs.hashSync(password, 10);
+  const salt = bcryptjs.genSaltSync(10);
+  const hashPassword = bcryptjs.hashSync(password, salt);
   const newUser = new User({ username, email, password: hashPassword });
 
   try {
@@ -15,3 +16,5 @@ export const signup = async (req, res,next) => {
     next(error)
   }
 };
+
+
