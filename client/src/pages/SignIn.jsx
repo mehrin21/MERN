@@ -6,11 +6,13 @@ import {
   signInStart,
   signInSuccess,
 } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
 
   const { loading, error } = useSelector((state) => state.user);
+  console.log("loading", loading);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,7 +28,6 @@ const SignUp = () => {
     e.preventDefault();
     try {
       dispatch(signInStart());
-      // setLoading(true);
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -73,6 +74,7 @@ const SignUp = () => {
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
+        <OAuth/>
       </form>
       <div className="flex gap-2 p-3 mt-5">
         <p>Dont have an Account?</p>

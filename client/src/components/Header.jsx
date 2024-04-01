@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { HiMenuAlt3 } from "react-icons/hi";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const { currentUser } = useSelector((state) => state.user);
+
   const [isMenu, setIsMenu] = useState(false);
   const handleMenu = () => {
     setIsMenu(!isMenu); // Toggle the value of isMenu
@@ -31,25 +34,29 @@ const Header = () => {
         </form>
         <div className="hidden sm:block">
           <ul className="flex gap-4 ">
-            <Link to='/'>
-            <li className="text-blue-500 font-semibold  cursor-pointer hover:underline">
-              HOME
-            </li>
+            <Link to="/">
+              <li className="text-blue-500 font-semibold  cursor-pointer hover:underline">
+                HOME
+              </li>
             </Link>
-            <Link to='/about'>
-            <li className="text-blue-500 font-semibold  cursor-pointer hover:underline">
-              ABOUT
-            </li>
+            <Link to="/about">
+              <li className="text-blue-500 font-semibold  cursor-pointer hover:underline">
+                ABOUT
+              </li>
             </Link>
-            <Link to='/sign-in'>
-            <li className="text-blue-500 font-semibold  cursor-pointer hover:underline">
-              SIGN IN
-            </li>
+            <Link to="/profile">
+              {currentUser ? (
+                <img className="rounded-full h-7 w-7 object-cover" src={currentUser.avatar} alt="profile" />
+              ) : (
+                <li className="text-blue-500 font-semibold  cursor-pointer hover:underline">
+                  SIGN IN
+                </li>
+              )}
             </Link>
           </ul>
         </div>
         <div className="block sm:hidden">
-          <HiMenuAlt3 onClick={handleMenu} className="text-2xl"/>
+          <HiMenuAlt3 onClick={handleMenu} className="text-2xl" />
           {isMenu && (
             <ul className="flex flex-col gap-4 ">
               <li className="text-blue-500 font-semibold  cursor-pointer">
