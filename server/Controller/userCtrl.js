@@ -1,6 +1,7 @@
 import { errorHandler } from "../util/errorHandler.js";
 import bcryptjs from "bcryptjs";
 import User from "../model/UserModel.js";
+import Listing from "../model/ListingModel.js";
 
 export const updateUser = async (req, res, next) => {
   // console.log("rea",req)
@@ -39,17 +40,33 @@ export const deleteUser = async (req, res, next) => {
     return next(errorHandler(401, "You can only update your own account"));
   try {
     await User.findByIdAndDelete(req.params.id);
-    res.clearCookie('access_token');
-    res.status(200).json("User has been deleted")
+    res.clearCookie("access_token");
+    res.status(200).json("User has been deleted");
   } catch (error) {
     next(error);
   }
 };
- export const signout = async(req,res,next)=>{
-     try {
-      res.clearCookie('access_token')
-      res.status(200).json('User has been Logged Out')
-     } catch (error) {
-      next(error)
-     }
- }
+export const signout = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token");
+    res.status(200).json("User has been Logged Out");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserListing = async (req, res, next) => {
+  console.log(req.user)
+  console.log(req.params)
+  if (req.user.id === req.params.id) {
+    try {
+      const listing = await Listing.find({ userRef: req.params.id });
+      console.log("listing",listing)
+      res.status(200).json(listing);
+    } catch (error) {
+      next(error);
+    }
+  } else {
+    return next(errorHandler(401, "You can only view your own listings!"));
+  }
+};
